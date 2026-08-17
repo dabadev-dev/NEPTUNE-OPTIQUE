@@ -5,6 +5,8 @@ function App() {
   return (
     <div>
       <h1 className="bg-red-500">bonjour daba</h1>
+      <h1 className="bg-purple-500">bonjour latyr</h1>
+
     </div>
   )
 }
