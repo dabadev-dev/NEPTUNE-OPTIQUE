@@ -1,14 +1,27 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import HomeLayout from "./layout/homeLayout";
+
+import Hero from "./components/Hero";
 
 
 function App() {
-
   return (
-    <div>
-      <h1 className="bg-red-500">bonjour daba</h1>
-      <h1 className="bg-purple-500 font-bold">bonjour abdoulay</h1>
-
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomeLayout />}>
+          <Route
+            index
+            element={
+              <>
+                <Hero />
+                <VideoSection />
+              </>
+            }
+          />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
