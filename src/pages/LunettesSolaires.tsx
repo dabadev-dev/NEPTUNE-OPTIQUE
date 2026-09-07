@@ -1,12 +1,16 @@
+import CatalogBanner from "../components/CatalogBanner";
 import ProductGrid from "../components/ProductGrid";
+import { products } from "../data/products";
 
-import { solarGlasses } from "../data/product";
 
 export default function LunettesSolaires() {
+  const solarGlasses = products.filter((product)=> product.type === "Solaires")
+  
   return (
     <main className="min-h-screen bg-white">
 
-      
+            <CatalogBanner />
+
 
       {/* ================= CATALOGUE ================= */}
       <section
