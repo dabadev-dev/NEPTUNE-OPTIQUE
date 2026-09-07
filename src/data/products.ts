@@ -15,7 +15,7 @@ export const products: Product[] = [
     price: 30000,
     image: "/images/lunette1.jpg",
     category: "Femmes",
-    type: "Solaires",
+    type: "Optiques",
     shape: "Carrées",
   },
   {
@@ -24,7 +24,7 @@ export const products: Product[] = [
     price: 30000,
     image: "/images/lunette2.jpg",
     category: "Femmes",
-    type: "Solaires",
+    type: "Optiques",
     shape: "Carrées",
   },
   {
@@ -120,3 +120,4 @@ export const products: Product[] = [
   
   
 ]
+
