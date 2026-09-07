@@ -5,8 +5,8 @@ export default function Hero() {
     <section className="relative w-full overflow-hidden bg-white">
       {/* ================= IMAGE ================= */}
       <div className="relative h-[500px] w-full overflow-hidden">
-        <img src="neptuneimg.png"
-         
+        <img
+          src="/images/famille.png"
           alt="Famille Neptune Optique"
           className="h-full w-full object-cover"
         />

@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react"
 import type { Product } from "../data/products"
+import { Link } from "react-router-dom"
 
 interface ProductCardProps {
   product: Product
@@ -10,7 +11,7 @@ export default function ProductCard({
 }: ProductCardProps) {
 
   return (
-    <div className="group">
+    <Link to={`/product/${product.id}`} className="group">
 
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden bg-gray-100">
@@ -63,6 +64,6 @@ export default function ProductCard({
 
       </div>
 
-    </div>
+    </Link>
   )
 }

@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import FooterSection from "../components/footerSection";
 import Navbar from "../components/Navbar";
 import { ArrowUp } from "lucide-react";
-import CatalogBanner from "../components/CatalogBanner";
 
 export default function HomeLayout() {
 
@@ -16,7 +15,7 @@ export default function HomeLayout() {
     <div>
       {/* Navbar */}
       <Navbar />
-      <CatalogBanner />
+      {/* <CatalogBanner /> */}
 
       {/* Outlet */}
       <Outlet />

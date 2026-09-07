@@ -1,8 +1,13 @@
+import CatalogBanner from "../components/CatalogBanner";
 import ProductGrid from "../components/ProductGrid";
-import { opticalGlasses } from "../data/products";
+import { products } from "../data/products";
+
 export default function LunettesOptiques() {
+const optiqueGlasses = products.filter((product)=> product.type === "Optiques")
   return (
     <main className="min-h-screen bg-white">
+                    <CatalogBanner />
+        
 
       {/* ================= CATALOGUE ================= */}
       <section
@@ -34,7 +39,7 @@ export default function LunettesOptiques() {
           </div>
 
           {/* PRODUITS */}
-          <ProductGrid products={opticalGlasses} />
+          <ProductGrid products={optiqueGlasses} />
 
         </div>
       </section>

@@ -3,6 +3,7 @@ import ProductDetail from "../components/ProductDetail";
 import ProductTabs from "../components/ProductTabs";
 import { products } from "../data/products";
 import RelatedProducts from "../components/RelatedProducts";
+import CatalogBanner from "../components/CatalogBanner";
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -16,6 +17,8 @@ function ProductDetailPage() {
 
   return (
     <>
+          <CatalogBanner />
+
       <ProductDetail product={product} />
       <ProductTabs
         description="Lunette de soleil pour homme – Modification Cira"

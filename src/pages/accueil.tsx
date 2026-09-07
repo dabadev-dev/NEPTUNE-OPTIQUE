@@ -1,6 +1,13 @@
+import Hero from "../components/Hero";
+import SaviezVous from "../components/SaviezVous";
+import VideoSection from "../components/videosection";
 
-export default function accueil() {
+export default function Accueil() {
   return (
-    <div>accueil</div>
-  )
+    <div>
+      <Hero />
+      <VideoSection />
+      <SaviezVous />
+    </div>
+  );
 }
