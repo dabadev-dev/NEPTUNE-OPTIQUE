@@ -1,139 +1,107 @@
-// "use client";
+export default function VideoSection() {
+  const videos = [
+    {
+      id: 1,
+      title: "Nos offres",
+      src: "/videos/video1.mp4",
+    },
+    {
+      id: 2,
+      title: "Nos services",
+      src: "/videos/video2.mp4",
+    },
+    {
+      id: 3,
+      title: "Pourquoi nous choisir ?",
+      src: "/videos/video3.mp4",
+    },
+  ];
 
-// import { useRef, useState } from "react";
-// import { Play } from "lucide-react";
+  return (
+    <section className="w-full bg-white px-4 py-16 md:px-8 lg:px-16">
+      <div className="mx-auto max-w-7xl">
 
-// const videos = [
-//   {
-//     src: "/videos/formule1.mp4",
-//     poster: "/images/video1.png",
-//   },
-//   {
-//     src: "/videos/formule2.mp4",
-//     poster: "/images/video2.png",
-//   },
-//   {
-//     src: "/videos/formule3.mp4",
-//     poster: "/images/video3.png",
-//   },
-// ];
+        {/* ================= TITRE ================= */}
+        <div className="mb-10 text-center">
+          <h2
+            className="
+              text-3xl
+              font-bold
+              text-gray-700
+              md:text-4xl
+              lg:text-5xl
+            "
+          >
+            Découvrez nos formules en vidéo
+          </h2>
+        </div>
 
-// export default function FormulesVideo() {
-//   const [playing, setPlaying] = useState(null);
-//   const videoRefs = useRef([]);
+        {/* ================= 3 VIDÉOS ================= */}
+        <div
+          className="
+            flex
+            flex-col
+            gap-6
+            md:flex-row
+            md:items-stretch
+            md:justify-center
+          "
+        >
+          {videos.map((video) => (
+            <div
+              key={video.id}
+              className="
+                group
+                relative
+                w-full
+                overflow-hidden
+                rounded-3xl
+                bg-gray-100
+                shadow-md
+                transition
+                duration-300
+                hover:-translate-y-1
+                hover:shadow-xl
+                md:w-1/3
+              "
+            >
+              <video
+                src={video.src}
+                controls
+                playsInline
+                preload="metadata"
+                className="
+                  aspect-[9/16]
+                  h-full
+                  w-full
+                  object-cover
+                "
+              />
 
-//   const handlePlay = (index) => {
-//     const video = videoRefs.current[index];
+              {/* TITRE */}
+              <div
+                className="
+                  absolute
+                  bottom-0
+                  left-0
+                  right-0
+                  bg-gradient-to-t
+                  from-black/70
+                  to-transparent
+                  px-5
+                  pb-5
+                  pt-12
+                "
+              >
+                <h3 className="text-lg font-bold text-white">
+                  {video.title}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </div>
 
-//     if (!video) return;
-
-//     // Arrêter les autres vidéos
-//     videoRefs.current.forEach((otherVideo, i) => {
-//       if (otherVideo && i !== index) {
-//         otherVideo.pause();
-//       }
-//     });
-
-//     video.play();
-//     setPlaying(index);
-//   };
-
-//   const handlePause = (index) => {
-//     setPlaying(null);
-//   };
-
-//   return (
-//     <section className="w-full bg-white py-16 px-4 sm:px-6 lg:px-8">
-      
-//       {/* TITRE */}
-//       <div className="mb-12 text-center">
-//         <h2 className="font-serif text-4xl font-medium text-[#3b3b3b] sm:text-5xl">
-//           Découvrez nos formules en vidéo
-//         </h2>
-//       </div>
-
-//       {/* VIDEOS */}
-//       <div className="mx-auto grid max-w-[1250px] grid-cols-1 gap-5 md:grid-cols-3">
-//         {videos.map((video, index) => (
-//           <div
-//             key={index}
-//             className="
-//               group
-//               relative
-//               aspect-[9/14]
-//               w-full
-//               overflow-hidden
-//               bg-gray-100
-//             "
-//           >
-//             <video
-//               ref={(el) => {
-//                 videoRefs.current[index] = el;
-//               }}
-//               src={video.src}
-//               poster={video.poster}
-//               playsInline
-//               preload="metadata"
-//               onPause={() => handlePause(index)}
-//               onEnded={() => handlePause(index)}
-//               className="
-//                 h-full
-//                 w-full
-//                 object-cover
-//               "
-//             />
-
-//             {/* BOUTON PLAY */}
-//             {playing !== index && (
-//               <button
-//                 onClick={() => handlePlay(index)}
-//                 aria-label={`Lire la vidéo ${index + 1}`}
-//                 className="
-//                   absolute
-//                   left-1/2
-//                   top-1/2
-//                   flex
-//                   h-20
-//                   w-20
-//                   -translate-x-1/2
-//                   -translate-y-1/2
-//                   items-center
-//                   justify-center
-//                   rounded-full
-//                   border-2
-//                   border-white
-//                   bg-black/10
-//                   backdrop-blur-[2px]
-//                   transition
-//                   duration-300
-//                   hover:scale-110
-//                   hover:bg-black/20
-//                 "
-//               >
-//                 <Play
-//                   size={30}
-//                   strokeWidth={1.5}
-//                   fill="white"
-//                   className="ml-1 text-white"
-//                 />
-//               </button>
-//             )}
-
-//             {/* PETIT OVERLAY AU SURVOL */}
-//             <div
-//               className="
-//                 pointer-events-none
-//                 absolute
-//                 inset-0
-//                 bg-black/0
-//                 transition
-//                 duration-300
-//                 group-hover:bg-black/5
-//               "
-//             />
-//           </div>
-//         ))}
-//       </div>
-//     </section>
-//   );
-// }
+      </div>
+    </section>
+  );
+}

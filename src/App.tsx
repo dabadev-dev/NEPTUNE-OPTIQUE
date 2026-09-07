@@ -1,14 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomeLayout from "./layout/homeLayout";
-import Hero from "./components/Hero";
+import Catalogue from "./pages/Catalogue";
+import ProductDetailPage from "./pages/product-detail";
+
+
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomeLayout />}>
-          <Route index element={<Hero />} />
-          {/* <Route index element={<VideoSection />} /> */}
+          <Route path="/catalogue" element={<Catalogue />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/product" element={<ProductDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
