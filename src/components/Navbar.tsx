@@ -1,4 +1,4 @@
-import { Heart, Menu, ShoppingCart } from "lucide-react";
+import { Heart, Menu, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
@@ -12,38 +12,28 @@ export default function Navbar() {
     <header>
       <div className="text-gray-900 flex justify-between items-center py-8 px-4 md:px-24">
         <Link to="/">
-          <img src="images/logo.png" alt="Logo" className="w-40" />
+          <img src="/images/logo.png" alt="Logo" className="w-40" />
         </Link>
         <nav className="hidden md:block">
           <ul className="flex font-medium space-x-8">
             <li>
-              <Link to="/" className="hover:text-yellow-600">
+              <Link to="/" className="hover:text-yellow-600 font-serif">
                 Accueil
               </Link>
             </li>
             <li>
-              <Link to="/catalogue" className="hover:text-yellow-600">
+              <Link to="/catalogue" className="hover:text-yellow-600 font-serif">
                 Catalogue
               </Link>
             </li>
             <li>
-              <Link to="/solaires" className="hover:text-yellow-600">
+              <Link to="/solaires" className="hover:text-yellow-600 font-serif">
                 Solaires
               </Link>
             </li>
             <li>
-              <Link to="/optiques" className="hover:text-yellow-600">
+              <Link to="/optiques" className="hover:text-yellow-600 font-serif">
                 Optiques
-              </Link>
-            </li>
-            <li>
-              <Link to="/offres" className="hover:text-yellow-600">
-                Offres
-              </Link>
-            </li>
-            <li>
-              <Link to="/services" className="hover:text-yellow-600">
-                Services
               </Link>
             </li>
           </ul>
@@ -55,8 +45,11 @@ export default function Navbar() {
           </Link>
 
           {/* Panier */}
-          <Link to="/panier">
-            <ShoppingCart size={24} strokeWidth={1.8} />
+          <Link to="/panier" className="relative">
+            <ShoppingBag size={24} strokeWidth={1.8} />
+           <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#29438f] text-[9px] text-white">
+              0
+            </span>
           </Link>
         </div>
         <div className="md:hidden">

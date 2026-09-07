@@ -1,6 +1,5 @@
 import ProductGrid from "../components/ProductGrid";
-import { opticalGlasses } from "../data/product";
-
+import { opticalGlasses } from "../data/products";
 export default function LunettesOptiques() {
   return (
     <main className="min-h-screen bg-white">

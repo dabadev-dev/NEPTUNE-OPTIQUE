@@ -5,14 +5,13 @@ import { BsEnvelope, BsTelephone } from "react-icons/bs";
 export default function FooterSection() {
   return (
     <footer>
-        <hr className="border-2 border-black" />
       <div className="bg-blue-900 text-white py-12 px-4"></div>
       <div className=" text-gray-900 py-12 px-4 ">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="space-y-4">
             <Link to="/">
               <img
-                src="images/logo.png"
+                src="/images/logo.png"
                 alt="Logo"
                 className="w-full max-w-xs"
               />
@@ -78,7 +77,7 @@ export default function FooterSection() {
             <span className="hover:text-yellow-500">Xarala.co</span>
           </div>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <img src="images/image1.png" alt="PayPal" className="w-80" />
+            <img src="/images/image1.png" alt="PayPal" className="w-80" />
           </div>
         </div>
       </div>
