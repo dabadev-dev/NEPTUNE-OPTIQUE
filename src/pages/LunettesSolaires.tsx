@@ -2,15 +2,14 @@ import CatalogBanner from "../components/CatalogBanner";
 import ProductGrid from "../components/ProductGrid";
 import { products } from "../data/products";
 
-
 export default function LunettesSolaires() {
-  const solarGlasses = products.filter((product)=> product.type === "Solaires")
-  
+  const solarGlasses = products.filter(
+    (product) => product.type === "Solaires",
+  );
+
   return (
     <main className="min-h-screen bg-white">
-
-            <CatalogBanner />
-
+      <CatalogBanner />
 
       {/* ================= CATALOGUE ================= */}
       <section
@@ -24,31 +23,10 @@ export default function LunettesSolaires() {
         "
       >
         <div className="mx-auto max-w-7xl">
-
-          {/* TITRE */}
-          <div className="mb-10">
-
-            <h1
-              className="
-                text-3xl
-                font-semibold
-                text-gray-900
-                md:text-4xl
-              "
-            >
-              Lunettes Solaires
-            </h1>
-
-            <div className="mt-3 h-0.5 w-12 bg-[#29438f]" />
-
-          </div>
-
           {/* PRODUITS */}
           <ProductGrid products={solarGlasses} />
-
         </div>
       </section>
-
     </main>
   );
 }
