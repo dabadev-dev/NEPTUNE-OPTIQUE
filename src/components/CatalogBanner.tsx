@@ -94,6 +94,9 @@ export default function CatalogBanner({
   if (path === "/solaires") {
     currentPage = "LUNETTES SOLAIRES";
   }
+   if (path === "/favoris") {
+    currentPage = "MES FAVORIS";
+  }
 
   return (
     <section className="relative h-70 overflow-hidden">
