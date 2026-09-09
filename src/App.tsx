@@ -6,6 +6,7 @@ import ProductDetailPage from "./pages/product-detail";
 import Accueil from "./pages/accueil";
 import LunettesSolaires from "./pages/LunettesSolaires";
 import LunettesOptiques from "./pages/LunettesOptiques";
+import Favorites from "./pages/favorites";
 
 
 
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeLayout />}>
           <Route index element={<Accueil />} />
+           <Route path="/favoris" element={<Favorites />} />
           <Route path="/catalogue" element={<Catalogue />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/product" element={<ProductDetailPage />} />
