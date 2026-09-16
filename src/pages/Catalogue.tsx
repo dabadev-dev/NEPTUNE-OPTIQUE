@@ -1,84 +1,84 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowUp } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import Filters from "../components/Filters";
 import SortBar from "../components/SortBar";
 import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
-
-import { products } from "../data/products";
-
-import type { SortOption, ViewMode } from "../components/SortBar";
-import { Link } from "react-router-dom";
 import CatalogBanner from "../components/CatalogBanner";
 
-export default function Catalogue() {
+import type { Product } from "../data/products";
+import { getProducts } from "../services/productService";
 
-  // ============================
-  // FILTRES
-  // ============================
+import type { SortOption, ViewMode } from "../components/SortBar";
+
+export default function Catalogue() {
+  const [products, setProducts] = useState<Product[]>([]);
 
   const [category, setCategory] = useState("");
   const [shape, setShape] = useState("");
   const [type, setType] = useState("");
-
   const [minPrice, setMinPrice] = useState(25000);
   const [maxPrice, setMaxPrice] = useState(350000);
 
-  // ============================
-  // TRI
-  // ============================
-
   const [sort, setSort] = useState<SortOption>("default");
-
-  // ============================
-  // AFFICHAGE
-  // ============================
-
   const [viewMode, setViewMode] = useState<ViewMode>("grid3");
-
-  // ============================
-  // PAGINATION
-  // ============================
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const productsPerPage = 9;
 
-  // ============================
-  // FILTRAGE
-  // ============================
+  // Récupérer les produits depuis le backend
+  useEffect(() => {
+    getProducts()
+      .then((data) => setProducts(data))
+      .catch((error) => {
+        console.error(
+          "Erreur lors du chargement des produits :",
+          error
+        );
+      });
+  }, []);
 
+  // Filtres
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Catégorie
     if (category) {
-      result = result.filter((product) => product.category === category);
+      result = result.filter(
+        (product) => product.category === category
+      );
     }
 
-    // Forme
     if (shape) {
-      result = result.filter((product) => product.shape === shape);
+      result = result.filter(
+        (product) => product.shape === shape
+      );
     }
 
-    // Type
     if (type) {
-      result = result.filter((product) => product.type === type);
+      result = result.filter(
+        (product) => product.type === type
+      );
     }
 
-    // Prix
     result = result.filter(
-      (product) => product.price >= minPrice && product.price <= maxPrice,
+      (product) =>
+        product.price >= minPrice &&
+        product.price <= maxPrice
     );
 
     return result;
-  }, [category, shape, type, minPrice, maxPrice]);
+  }, [
+    products,
+    category,
+    shape,
+    type,
+    minPrice,
+    maxPrice,
+  ]);
 
-  // ============================
-  // TRI
-  // ============================
-
+  // Tri
   const sortedProducts = useMemo(() => {
     const result = [...filteredProducts];
 
@@ -92,11 +92,15 @@ export default function Catalogue() {
         break;
 
       case "name-asc":
-        result.sort((a, b) => a.name.localeCompare(b.name));
+        result.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
         break;
 
       case "name-desc":
-        result.sort((a, b) => b.name.localeCompare(a.name));
+        result.sort((a, b) =>
+          b.name.localeCompare(a.name)
+        );
         break;
 
       default:
@@ -106,23 +110,20 @@ export default function Catalogue() {
     return result;
   }, [filteredProducts, sort]);
 
-  // ============================
-  // PAGINATION
-  // ============================
+  // Pagination
+  const totalPages = Math.ceil(
+    sortedProducts.length / productsPerPage
+  );
 
-  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
-
-  const startIndex = (currentPage - 1) * productsPerPage;
+  const startIndex =
+    (currentPage - 1) * productsPerPage;
 
   const displayedProducts = sortedProducts.slice(
     startIndex,
-    startIndex + productsPerPage,
+    startIndex + productsPerPage
   );
 
-  // ============================
-  // RESET PAGE APRÈS FILTRE
-  // ============================
-
+  // Gestion des filtres
   const handleCategory = (value: string) => {
     setCategory(value);
     setCurrentPage(1);
@@ -148,10 +149,7 @@ export default function Catalogue() {
     setCurrentPage(1);
   };
 
-  // ============================
-  // RETOUR EN HAUT
-  // ============================
-
+  // Retour en haut
   const retourEnHaut = () => {
     window.scrollTo({
       top: 0,
@@ -160,13 +158,10 @@ export default function Catalogue() {
   };
 
   return (
-    
     <div className="min-h-screen bg-white">
-        <CatalogBanner />
+      <CatalogBanner />
 
       <main className="mx-auto max-w-7xl px-6 py-14">
-        {/* ================= SORT BAR ================= */}
-
         <SortBar
           sort={sort}
           setSort={(value) => {
@@ -177,17 +172,22 @@ export default function Catalogue() {
           setViewMode={setViewMode}
         />
 
-        {/* NOMBRE DE PRODUITS */}
-
+        {/* Nombre de résultats */}
         <div className="mb-6 text-right text-gray-600">
-          Affichage de {sortedProducts.length === 0 ? 0 : startIndex + 1}–
-          {Math.min(startIndex + productsPerPage, sortedProducts.length)} sur{" "}
-          {sortedProducts.length} résultats
+          Affichage de{" "}
+          {sortedProducts.length === 0
+            ? 0
+            : startIndex + 1}
+          –
+          {Math.min(
+            startIndex + productsPerPage,
+            sortedProducts.length
+          )}{" "}
+          sur {sortedProducts.length} résultats
         </div>
 
         <div className="flex flex-col gap-10 lg:flex-row">
-          {/* ================= FILTERS ================= */}
-
+          {/* Filtres */}
           <Filters
             category={category}
             shape={shape}
@@ -202,12 +202,13 @@ export default function Catalogue() {
             products={products}
           />
 
-          {/* ================= PRODUITS ================= */}
-
+          {/* Produits */}
           <section className="flex-1">
             {displayedProducts.length === 0 ? (
               <div className="py-20 text-center">
-                <p className="text-lg text-gray-600">Aucun produit trouvé.</p>
+                <p className="text-lg text-gray-600">
+                  Aucun produit trouvé.
+                </p>
 
                 <button
                   onClick={() => {
@@ -225,27 +226,36 @@ export default function Catalogue() {
               </div>
             ) : (
               <div
-                className={`
-                  grid gap-x-5 gap-y-8
+                className={`grid gap-x-5 gap-y-8
                   ${
                     viewMode === "grid3"
                       ? "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
                       : ""
                   }
-                  ${viewMode === "grid2" ? "grid-cols-1 sm:grid-cols-2" : ""}
-                  ${viewMode === "list" ? "grid-cols-1" : ""}
+                  ${
+                    viewMode === "grid2"
+                      ? "grid-cols-1 sm:grid-cols-2"
+                      : ""
+                  }
+                  ${
+                    viewMode === "list"
+                      ? "grid-cols-1"
+                      : ""
+                  }
                 `}
               >
                 {displayedProducts.map((product) => (
-                  <Link to={`/product/${product.id}`} key={product.id}>
-                    <ProductCard key={product.id} product={product} />
+                  <Link
+                    to={`/product/${product.id}`}
+                    key={product.id}
+                  >
+                    <ProductCard product={product} />
                   </Link>
                 ))}
               </div>
             )}
 
-            {/* ================= PAGINATION ================= */}
-
+            {/* Pagination */}
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -255,29 +265,10 @@ export default function Catalogue() {
         </div>
       </main>
 
-      {/* RETOUR EN HAUT */}
-
+      {/* Bouton retour en haut */}
       <button
         onClick={retourEnHaut}
-        className="
-          fixed
-          bottom-5
-          right-5
-          flex
-          h-10
-          w-10
-          items-center
-          justify-center
-          rounded-full
-          border
-          border-[#29438f]
-          bg-white
-          text-[#29438f]
-          shadow-sm
-          transition
-          hover:bg-[#29438f]
-          hover:text-white
-        "
+        className="fixed bottom-5 right-5 flex h-10 w-10 items-center justify-center rounded-full border border-[#29438f] bg-white text-[#29438f] shadow-sm transition hover:bg-[#29438f] hover:text-white"
       >
         <ArrowUp size={18} />
       </button>

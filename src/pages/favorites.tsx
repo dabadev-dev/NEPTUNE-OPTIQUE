@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { getFavorites, toggleFavorite, type Product } from "../utils/favorites";
+import { getFavorites, toggleFavorite } from "../utils/favorites";
 import { Heart } from "lucide-react";
 import CatalogBanner from "../components/CatalogBanner";
+import type { Product } from "../data/products";
 
 export default function Favorites() {
   const [favorites, setFavorites] = useState<Product[]>([]);

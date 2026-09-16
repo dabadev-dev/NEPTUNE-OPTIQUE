@@ -1,4 +1,4 @@
-import type { Product } from "./favorites";
+import type { Product } from "../data/products";
 
 const CART_KEY = "neptune_cart";
 

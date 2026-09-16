@@ -1,47 +1,75 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import ProductDetail from "../components/ProductDetail";
 import ProductTabs from "../components/ProductTabs";
-import { products } from "../data/products";
 import RelatedProducts from "../components/RelatedProducts";
 import CatalogBanner from "../components/CatalogBanner";
 
+import type { Product } from "../data/products";
+import { getProducts } from "../services/productService";
+
 function ProductDetailPage() {
   const { id } = useParams();
-  const product = products.find((item) => item.id === Number(id));
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getProducts()
+      .then((data) => setProducts(data))
+      .catch((error) => {
+        console.error(
+          "Erreur lors du chargement des produits :",
+          error
+        );
+      });
+  }, []);
+
+  const product = products.find(
+    (item) => item.id === Number(id)
+  );
 
   if (!product) {
-    return <p className="px-6 py-20 text-center">Produit introuvable.</p>;
+    return (
+      <p className="px-6 py-20 text-center">
+        Produit introuvable.
+      </p>
+    );
   }
 
-  const relatedProducts = products.filter((item) => item.id !== product.id);
+  const relatedProducts = products.filter(
+    (item) => item.id !== product.id
+  );
 
   return (
     <>
-      <CatalogBanner productName={product.name} productType={product.type} />
+      <CatalogBanner />
 
       <ProductDetail product={product} />
+
       <ProductTabs
         description="Lunette de soleil pour homme – Modification Cira"
         reviewsCount={0}
         additionalInfo={[
           {
             label: "Type",
-            value: "Lunettes de soleil",
+            value: product.type,
           },
           {
             label: "Genre",
-            value: "Homme",
+            value: product.category,
           },
           {
             label: "Couleur",
-            value: "Noir",
+            value: product.color || "Non précisée",
           },
           {
-            label: "Matière",
-            value: "Acétate",
+            label: "Forme",
+            value: product.shape,
           },
         ]}
       />
+
       <RelatedProducts products={relatedProducts} />
     </>
   );

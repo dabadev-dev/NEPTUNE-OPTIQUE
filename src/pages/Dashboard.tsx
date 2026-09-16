@@ -20,12 +20,14 @@ import {
   type User as UserType,
 } from "../services/authService";
 
-import { products } from "../data/products";
 import { getFavorites } from "../utils/favorites";
 import { getCartCount } from "../utils/Panier";
+import type { Product } from "../data/products";
+import { getProducts } from "../services/productService";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [products, setProducts] = useState<Product[]>([]);
 
   const [user, setUser] = useState<UserType | null>(
     getCurrentUser(),
@@ -42,6 +44,18 @@ export default function Dashboard() {
   );
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    // Récupérer les produits depuis le backend
+    useEffect(() => {
+      getProducts()
+        .then((data) => setProducts(data))
+        .catch((error) => {
+          console.error(
+            "Erreur lors du chargement des produits :",
+            error
+          );
+        });
+    }, []);
 
   useEffect(() => {
     async function loadProfile() {

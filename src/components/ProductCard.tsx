@@ -18,18 +18,14 @@ export default function ProductCard({ product }: ProductCardProps) {
     setFavorites(updated);
   };
 
-  const isFavorite = favorites.some(
-    (item) => item.id === product.id
-  );
+  const isFavorite = favorites.some((item) => item.id === product.id);
 
   return (
     <article className="group">
-
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-
         <img
-          src={product.image}
+          src={`http://localhost:3000/${product.image}`}
           alt={product.name}
           className="
             h-full
@@ -64,20 +60,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             fill={isFavorite ? "#263f87" : "none"}
           />
         </button>
-
       </div>
 
       {/* INFOS */}
       <div className="py-3 text-center">
-        <h3 className="text-sm text-gray-800">
-          {product.name}
-        </h3>
+        <h3 className="text-sm text-gray-800">{product.name}</h3>
 
         <p className="mt-1 text-xs text-gray-700">
           {product.price.toLocaleString("fr-FR")} CFA
         </p>
       </div>
-
     </article>
   );
 }

@@ -1,10 +1,4 @@
-
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-}
+import type { Product } from "../data/products";
 
 const STORAGE_KEY = "favorites";
 

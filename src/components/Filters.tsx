@@ -1,19 +1,19 @@
-import type { Product } from "../data/products"
+import type { Product } from "../data/products";
 
 interface FiltersProps {
-  category: string
-  shape: string
-  type: string
-  minPrice: number
-  maxPrice: number
+  category: string;
+  shape: string;
+  type: string;
+  minPrice: number;
+  maxPrice: number;
 
-  setCategory: (value: string) => void
-  setShape: (value: string) => void
-  setType: (value: string) => void
-  setMinPrice: (value: number) => void
-  setMaxPrice: (value: number) => void
+  setCategory: (value: string) => void;
+  setShape: (value: string) => void;
+  setType: (value: string) => void;
+  setMinPrice: (value: number) => void;
+  setMaxPrice: (value: number) => void;
 
-  products: Product[]
+  products: Product[];
 }
 
 export default function Filters({
@@ -31,11 +31,9 @@ export default function Filters({
 }: FiltersProps) {
   return (
     <aside className="w-full lg:w-57.5">
-
       {/* ================= CATÉGORIES ================= */}
 
       <div className="mb-8">
-
         <h2 className="mb-4 font-serif text-lg">
           Des Lunettes Pour Tous
         </h2>
@@ -46,7 +44,6 @@ export default function Filters({
             className="flex cursor-pointer items-center justify-between py-2 text-sm"
           >
             <div className="flex items-center gap-2">
-
               <input
                 type="radio"
                 name="category"
@@ -56,10 +53,9 @@ export default function Filters({
               />
 
               <span>{item}</span>
-
             </div>
 
-            <span className="text-xs text-gray-500">
+            {/* <span className="text-xs text-gray-500">
               (
               {
                 products.filter(
@@ -67,24 +63,21 @@ export default function Filters({
                 ).length
               }
               )
-            </span>
+            </span> */}
           </label>
         ))}
 
-        {/* Toutes */}
         <button
           onClick={() => setCategory("")}
           className="mt-2 text-xs text-[#29438f] underline"
         >
           Voir toutes
         </button>
-
       </div>
 
-      {/* ================= TYPES DE MONTURES ================= */}
+      {/* ================= FORMES ================= */}
 
       <div className="mb-8">
-
         <h2 className="mb-4 font-serif text-lg">
           Types De Montures
         </h2>
@@ -117,13 +110,11 @@ export default function Filters({
         >
           Toutes les montures
         </button>
-
       </div>
 
-      {/* ================= TYPE LUNETTES ================= */}
+      {/* ================= TYPE DE LUNETTES ================= */}
 
       <div className="mb-8">
-
         <h2 className="mb-4 font-serif text-lg">
           Type De Lunette
         </h2>
@@ -151,23 +142,22 @@ export default function Filters({
         >
           Tous les types
         </button>
-
       </div>
 
       {/* ================= PRIX ================= */}
 
       <div>
-
         <h2 className="mb-5 font-serif text-lg">
           Grille Tarifaire
         </h2>
 
         <div className="mb-4 flex items-center justify-between gap-2">
-
           <input
             type="number"
             value={minPrice}
-            onChange={(e) => setMinPrice(Number(e.target.value))}
+            onChange={(e) =>
+              setMinPrice(Number(e.target.value))
+            }
             className="w-24 border border-gray-300 px-2 py-2 text-xs outline-none"
             placeholder="Min"
           />
@@ -177,25 +167,24 @@ export default function Filters({
           <input
             type="number"
             value={maxPrice}
-            onChange={(e) => setMaxPrice(Number(e.target.value))}
+            onChange={(e) =>
+              setMaxPrice(Number(e.target.value))
+            }
             className="w-24 border border-gray-300 px-2 py-2 text-xs outline-none"
             placeholder="Max"
           />
-
         </div>
 
         <button
           onClick={() => {
-            setMinPrice(25.000)
-            setMaxPrice(350.000)
+            setMinPrice(25000);
+            setMaxPrice(350000);
           }}
           className="bg-[#29438f] px-6 py-2 text-xs font-semibold text-white transition hover:bg-[#1d316e]"
         >
           FILTER
         </button>
-
       </div>
-
     </aside>
-  )
+  );
 }

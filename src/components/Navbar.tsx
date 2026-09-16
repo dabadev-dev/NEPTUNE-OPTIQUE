@@ -1,24 +1,7 @@
 import { Heart, Menu, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-import { getCartCount } from "../utils/Panier";
 
 export default function Navbar() {
-  const [cartCount, setCartCount] = useState(getCartCount());
-
-  useEffect(() => {
-    const updateCart = () => {
-      setCartCount(getCartCount());
-    };
-
-    window.addEventListener("cartUpdated", updateCart);
-
-    return () => {
-      window.removeEventListener("cartUpdated", updateCart);
-    };
-  }, []);
-
   const message = `
     PROFITEZ DE NOS LUNETTES DE SOLEIL À PARTIR DE 10000 FRS SEULEMENT.
     PROTÉGEZ VOS YEUX AVEC STYLE ET À PETIT PRIX
@@ -39,10 +22,7 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
-              <Link
-                to="/catalogue"
-                className="hover:text-yellow-600 font-serif"
-              >
+              <Link to="/catalogue" className="hover:text-yellow-600 font-serif">
                 Catalogue
               </Link>
             </li>
@@ -65,14 +45,11 @@ export default function Navbar() {
           </Link>
 
           {/* Panier */}
-          <Link to="/panier" className="relative" aria-label="Panier">
-            <ShoppingBag size={22} />
-
-            {cartCount > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#29438f] px-1 text-[10px] font-semibold text-white">
-                {cartCount}
-              </span>
-            )}
+          <Link to="/panier" className="relative">
+            <ShoppingBag size={24} strokeWidth={1.8} />
+           <span className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#29438f] text-[9px] text-white">
+              0
+            </span>
           </Link>
         </div>
         <div className="md:hidden">
