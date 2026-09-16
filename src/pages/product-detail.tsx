@@ -17,10 +17,7 @@ function ProductDetailPage() {
 
   return (
     <>
-          <CatalogBanner
-  productName={product.name}
-  productType={product.type}
-/>
+      <CatalogBanner productName={product.name} productType={product.type} />
 
       <ProductDetail product={product} />
       <ProductTabs
@@ -28,25 +25,25 @@ function ProductDetailPage() {
         reviewsCount={0}
         additionalInfo={[
           {
-        label: "Type",
-        value: "Lunettes de soleil",
-      },
-      {
-        label: "Genre",
-        value: "Homme",
-      },
-      {
-        label: "Couleur",
-        value: "Noir",
-      },
-      {
-        label: "Matière",
-        value: "Acétate",
-      },
-    ]}
-  />
+            label: "Type",
+            value: "Lunettes de soleil",
+          },
+          {
+            label: "Genre",
+            value: "Homme",
+          },
+          {
+            label: "Couleur",
+            value: "Noir",
+          },
+          {
+            label: "Matière",
+            value: "Acétate",
+          },
+        ]}
+      />
       <RelatedProducts products={relatedProducts} />
-  </>
+    </>
   );
 }
 
