@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { Product } from "../data/products";
 import { FaWhatsapp } from "react-icons/fa";
+import { addToCart } from "../utils/Panier";
 
 interface ProductDetailProps {
   product: Product;
@@ -42,17 +43,26 @@ export default function ProductDetail({
     setQuantity((prev) => Math.min(stock, prev + 1));
   };
 
+  const [addedToCart, setAddedToCart] = useState(false);
+
   const handleAddToCart = () => {
+    addToCart(product, quantity);
+
     if (onAddToCart) {
       onAddToCart(product, quantity);
     }
+
+    setAddedToCart(true);
+
+    setTimeout(() => {
+      setAddedToCart(false);
+    }, 2000);
   };
 
   return (
     <section className="w-full bg-white">
       <div className="mx-auto max-w-300 px-4 py-10 md:px-6 lg:py-14">
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12">
-
           {/* =========================
               GALERIE PRODUIT
           ========================== */}
@@ -160,7 +170,6 @@ export default function ProductDetail({
                 BOUTONS ACTION
             ========================== */}
             <div className="flex flex-wrap items-center gap-3">
-
               {/* Comparer */}
               <button
                 type="button"
@@ -229,8 +238,9 @@ export default function ProductDetail({
                   hover:text-[#263f87]
                 "
               >
-                <span className="font-medium"><FaWhatsapp />
-</span>
+                <span className="font-medium">
+                  <FaWhatsapp />
+                </span>
                 Share on WhatsApp
               </button>
             </div>
@@ -239,7 +249,6 @@ export default function ProductDetail({
                 QUANTITE + PANIER
             ========================== */}
             <div className="mt-4 flex flex-wrap gap-4">
-
               {/* Quantité */}
               <div className="flex h-10 border border-gray-300">
                 <button
@@ -276,16 +285,16 @@ export default function ProductDetail({
                 type="button"
                 onClick={handleAddToCart}
                 className="
-                  flex h-10 items-center justify-center
-                  gap-2 border border-[#171717]
-                  px-7 text-sm font-medium uppercase
-                  transition
-                  hover:bg-[#263f87]
-                  hover:text-white
-                "
+    flex h-10 items-center justify-center
+    gap-2 border border-[#171717]
+    px-7 text-sm font-medium uppercase
+    transition
+    hover:bg-[#263f87]
+    hover:text-white
+  "
               >
                 <ShoppingBag size={17} strokeWidth={1.5} />
-                Ajouter au panier
+                {addedToCart ? "Ajouté au panier ✓" : "Ajouter au panier"}
               </button>
             </div>
 
@@ -328,7 +337,6 @@ export default function ProductDetail({
                 AVANTAGES
             ========================== */}
             <div className="grid grid-cols-3 border border-gray-300">
-              
               <div className="flex flex-col items-center px-2 py-6 text-center">
                 <CreditCard
                   size={42}
@@ -342,11 +350,7 @@ export default function ProductDetail({
               </div>
 
               <div className="flex flex-col items-center border-x border-gray-300 px-2 py-6 text-center">
-                <Gift
-                  size={42}
-                  strokeWidth={1.2}
-                  className="text-gray-700"
-                />
+                <Gift size={42} strokeWidth={1.2} className="text-gray-700" />
 
                 <p className="mt-3 text-xs font-medium uppercase text-gray-800 md:text-sm">
                   Free Discount Code
@@ -371,12 +375,8 @@ export default function ProductDetail({
             ========================== */}
             <div className="mt-6 border-t border-gray-200 pt-5">
               <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-700">
-
                 <span>
-                  Stock:{" "}
-                  <strong className="font-medium">
-                    {stock}
-                  </strong>
+                  Stock: <strong className="font-medium">{stock}</strong>
                 </span>
 
                 <span className="flex items-center gap-2">
@@ -407,17 +407,10 @@ export default function ProductDetail({
             ========================== */}
             <div className="mt-6 border-t border-gray-200 pt-4">
               <div className="flex items-center gap-3">
-
-                <img
-                  src="/images/image1.png"
-                  alt="Visa"
-                  className=" w-80"
-                />
+                <img src="/images/image1.png" alt="Visa" className=" w-80" />
               </div>
 
-              <p className="text-sm">
-                10% off when paying by credit card
-              </p>
+              <p className="text-sm">10% off when paying by credit card</p>
             </div>
           </div>
         </div>
