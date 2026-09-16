@@ -17,7 +17,10 @@ function ProductDetailPage() {
 
   return (
     <>
-          <CatalogBanner />
+          <CatalogBanner
+  productName={product.name}
+  productType={product.type}
+/>
 
       <ProductDetail product={product} />
       <ProductTabs

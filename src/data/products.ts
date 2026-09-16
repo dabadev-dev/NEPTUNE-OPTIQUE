@@ -42,7 +42,7 @@ export const products: Product[] = [
     price: 30000,
     image: "/images/lunette4.jpg",
     category: "Hommes",
-    type: "Solaires",
+    type: "Optiques",
     shape: "Ovales",
   },
   {
@@ -60,7 +60,7 @@ export const products: Product[] = [
     price: 30000,
     image: "/images/lunette12.jpg",
     category: "Enfants",
-    type: "Solaires",
+    type: "Optiques",
     shape: "Rondes",
   },
   {
@@ -105,7 +105,7 @@ export const products: Product[] = [
     price: 30000,
     image: "/images/lunette10.jpg",
     category: "Femmes",
-    type: "Solaires",
+    type: "Optiques",
     shape: "Rectangulaires",
   },
   {
@@ -114,7 +114,7 @@ export const products: Product[] = [
     price: 30000,
     image: "/images/lunette11.jpg",
     category: "Femmes",
-    type: "Solaires",
+    type: "Optiques",
     shape: "Rectangulaires",
   },
   

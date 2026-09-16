@@ -1,11 +1,7 @@
-
 import { useEffect, useState } from "react";
-import {
-  getFavorites,
-  toggleFavorite,
-  type Product,
-} from "../utils/favorites";
+import { getFavorites, toggleFavorite, type Product } from "../utils/favorites";
 import { Heart } from "lucide-react";
+import CatalogBanner from "../components/CatalogBanner";
 
 export default function Favorites() {
   const [favorites, setFavorites] = useState<Product[]>([]);
@@ -19,16 +15,10 @@ export default function Favorites() {
     loadFavorites();
 
     // Écouter les changements
-    window.addEventListener(
-      "favoritesUpdated",
-      loadFavorites
-    );
+    window.addEventListener("favoritesUpdated", loadFavorites);
 
     return () => {
-      window.removeEventListener(
-        "favoritesUpdated",
-        loadFavorites
-      );
+      window.removeEventListener("favoritesUpdated", loadFavorites);
     };
   }, []);
 
@@ -37,63 +27,49 @@ export default function Favorites() {
   };
 
   return (
-    <section className="mx-auto max-w-300 px-4 py-10">
-
-      <h1 className="mb-8 text-3xl font-bold">
-        Mes favoris
-      </h1>
-
-      {favorites.length === 0 ? (
-        <p className="text-gray-500">
-          Aucun favori pour le moment.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-
-          {favorites.map((product) => (
-            <article
-              key={product.id}
-              className="relative"
-            >
-
-              <div className="relative aspect-square overflow-hidden bg-[#f5f5f3]">
-
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="h-full w-full object-cover"
-                />
-
-                <button
-                  type="button"
-                  onClick={() => removeFavorite(product)}
-                  className="absolute right-4 top-4"
-                >
-                  <Heart
-                    size={20}
-                    fill="#263f87"
-                    className="text-[#263f87]"
+    <section className="min-h-screen bg-white">
+      <CatalogBanner />
+      <div className="mx-auto max-w-7xl px-6 py-10 sm:py-16 lg:px-8">
+        {favorites.length === 0 ? (
+          <p className="text-gray-500">Aucun favori pour le moment.</p>
+        ) : (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {favorites.map((product) => (
+              <article key={product.id} className="relative">
+                <div className="relative aspect-square overflow-hidden bg-[#f5f5f3]">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="h-full w-full object-cover"
                   />
-                </button>
 
-              </div>
+                  <button
+                    type="button"
+                    onClick={() => removeFavorite(product)}
+                    className="absolute right-4 top-4"
+                  >
+                    <Heart
+                      size={20}
+                      fill="#263f87"
+                      className="text-[#263f87]"
+                    />
+                  </button>
+                </div>
 
-              <div className="pt-4 text-center">
-                <h2 className="text-sm font-medium md:text-base">
-                  {product.name}
-                </h2>
+                <div className="pt-4 text-center">
+                  <h2 className="text-sm font-medium md:text-base">
+                    {product.name}
+                  </h2>
 
-                <p className="mt-2 text-sm">
-                  {product.price.toLocaleString("fr-FR")} CFA
-                </p>
-              </div>
-
-            </article>
-          ))}
-
-        </div>
-      )}
-
+                  <p className="mt-2 text-sm">
+                    {product.price.toLocaleString("fr-FR")} CFA
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }
