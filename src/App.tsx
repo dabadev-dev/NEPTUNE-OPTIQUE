@@ -13,6 +13,10 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Panier from "./pages/Panier";
+import MesCommandes from "./pages/MesCommandes";
+import AdminCommandes from "./pages/AdminCommandes";
+import AdminRoute from "./components/AdminRoute";
+import FinaliserAchat from "./pages/FinaliserAchat";
 
 function App() {
   return (
@@ -27,6 +31,16 @@ function App() {
           <Route path="solaires" element={<LunettesSolaires />} />
           <Route path="optiques" element={<LunettesOptiques />} />
           <Route path="panier" element={<Panier />} />
+          <Route path="/mes-commandes" element={<MesCommandes />} />
+          <Route
+            path="/admin/commandes"
+            element={
+              <AdminRoute>
+                <AdminCommandes />
+              </AdminRoute>
+            }
+          />
+          <Route path="/finaliser-achat" element={<FinaliserAchat />} />
         </Route>
 
         {/* Authentification */}

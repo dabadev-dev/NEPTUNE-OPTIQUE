@@ -26,7 +26,7 @@ export default function Filters({
   setShape,
   setType,
   setMinPrice,
-  setMaxPrice
+  setMaxPrice,
 }: FiltersProps) {
   return (
     <aside className="w-full lg:w-57.5">

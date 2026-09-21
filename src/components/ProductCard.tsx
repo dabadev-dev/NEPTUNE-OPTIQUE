@@ -1,24 +1,68 @@
+import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import type { Product } from "../data/products";
-import { useState } from "react";
-import { getFavorites, toggleFavorite } from "../utils/favorites";
+import {
+  addFavorite,
+  getFavorites,
+  removeFavorite,
+} from "../services/favoriteService";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const [favorites, setFavorites] = useState(getFavorites());
+const [isFavorite, setIsFavorite] = useState(false);
 
-  const handleFavorite = (e: React.MouseEvent) => {
+useEffect(() => {
+  const loadFavorite = async () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) return;
+
+    try {
+      const favorites = await getFavorites();
+
+      const exists = favorites.some(
+        (favorite: any) => favorite.productId === product.id
+      );
+
+      setIsFavorite(exists);
+    } catch (error) {
+      console.error("Erreur favoris :", error);
+    }
+  };
+
+  loadFavorite();
+}, [product.id]);
+  const handleFavorite = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const updated = toggleFavorite(product);
-    setFavorites(updated);
-  };
+    const token = localStorage.getItem("access_token");
 
-  const isFavorite = favorites.some((item) => item.id === product.id);
+    if (!token) {
+      alert("Connectez-vous pour ajouter un favori");
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        await removeFavorite(product.id);
+        setIsFavorite(false);
+      } else {
+        await addFavorite(product.id);
+        setIsFavorite(true);
+      }
+   } catch (error: any) {
+  if (error.response?.status === 409) {
+    setIsFavorite(true);
+    return;
+  }
+
+  console.error("Erreur favori :", error);
+}
+  };
 
   return (
     <article className="group">
@@ -64,7 +108,9 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       {/* INFOS */}
       <div className="py-3 text-center">
-        <h3 className="text-sm text-gray-800">{product.name}</h3>
+        <h3 className="text-sm text-gray-800">
+          {product.name}
+        </h3>
 
         <p className="mt-1 text-xs text-gray-700">
           {product.price.toLocaleString("fr-FR")} CFA

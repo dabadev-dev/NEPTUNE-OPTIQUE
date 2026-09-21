@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { Product } from "../data/products";
 import ProductCard from "./ProductCard";
 
@@ -5,9 +6,7 @@ interface ProductGridProps {
   products: Product[];
 }
 
-export default function ProductGrid({
-  products,
-}: ProductGridProps) {
+export default function ProductGrid({ products }: ProductGridProps) {
   return (
     <div
       className="
@@ -21,10 +20,9 @@ export default function ProductGrid({
       "
     >
       {products.map((product) => (
-        <ProductCard
-          key={product.id} 
-          product={product}
-        />
+        <Link key={product.id} to={`/product/${product.id}`}>
+          <ProductCard product={product} />
+        </Link>
       ))}
     </div>
   );

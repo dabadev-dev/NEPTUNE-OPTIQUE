@@ -12,15 +12,10 @@ interface RelatedProductsProps {
   products: RelatedProduct[];
 }
 
-export default function RelatedProducts({
-  products,
-}: RelatedProductsProps) {
+export default function RelatedProducts({ products }: RelatedProductsProps) {
   const [startIndex, setStartIndex] = useState(0);
 
-  const visibleProducts = products.slice(
-    startIndex,
-    startIndex + 4
-  );
+  const visibleProducts = products.slice(startIndex, startIndex + 4);
 
   const nextProducts = () => {
     if (startIndex + 4 < products.length) {
@@ -36,7 +31,6 @@ export default function RelatedProducts({
 
   return (
     <section className="mx-auto max-w-300 px-4 pb-16 md:px-6">
-
       {/* =========================
           TITRE
       ========================== */}
@@ -91,24 +85,19 @@ export default function RelatedProducts({
           PRODUITS
       ========================== */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-
         {visibleProducts.map((product) => (
-          <article
-            key={product.id}
-            className="group"
-          >
+          <article key={product.id} className="group">
             {/* Image */}
             <div className="relative aspect-square overflow-hidden bg-[#f5f5f3]">
-
               <img
-                src={product.image}
+                src={`http://localhost:3000/${product.image}`}
                 alt={product.name}
                 className="
-                  h-full w-full
-                  object-cover
-                  transition duration-500
-                  group-hover:scale-105
-                "
+    h-full w-full
+    object-cover
+    transition duration-500
+    group-hover:scale-105
+  "
               />
 
               {/* Favoris */}
@@ -124,17 +113,12 @@ export default function RelatedProducts({
                 "
                 title="Ajouter aux favoris"
               >
-                <Heart
-                  size={19}
-                  strokeWidth={1.5}
-                />
+                <Heart size={19} strokeWidth={1.5} />
               </button>
-
             </div>
 
             {/* Informations */}
             <div className="pt-4 text-center">
-
               <h3 className="text-sm font-medium text-gray-800 md:text-base">
                 {product.name}
               </h3>
@@ -142,11 +126,9 @@ export default function RelatedProducts({
               <p className="mt-2 text-sm text-gray-700 md:text-base">
                 {product.price.toLocaleString("fr-FR")} CFA
               </p>
-
             </div>
           </article>
         ))}
-
       </div>
     </section>
   );
