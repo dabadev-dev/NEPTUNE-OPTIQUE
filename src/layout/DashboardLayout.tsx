@@ -258,6 +258,23 @@ export default function DashboardLayout() {
                 </span>
               )}
             </Link>
+
+             <Link
+              to="/dashboard/commandes"
+              onClick={() => setSidebarOpen(false)}
+              className="flex items-center justify-between rounded-xl px-4 py-3 text-sm text-gray-600 transition hover:bg-gray-50 hover:text-[#29438f]"
+            >
+              <span className="flex items-center gap-3">
+                <ShoppingBag size={18} />
+                Mes Commandes
+              </span>
+
+              {cartCount > 0 && (
+                <span className="rounded-full bg-[#29438f] px-2 py-0.5 text-xs text-white">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </div>
 
           <div className="my-7 border-t border-gray-100" />
