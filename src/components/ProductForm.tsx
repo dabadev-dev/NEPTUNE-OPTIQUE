@@ -244,9 +244,6 @@ export default function ProductForm({
                   <option value="Femmes">Femmes</option>
                   <option value="Hommes">Hommes</option>
                   <option value="Enfants">Enfants</option>
-                  <option value="lunettes solaires">
-                    Lunettes solaires
-                  </option>
                 </select>
               </div>
 
