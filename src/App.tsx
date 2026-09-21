@@ -39,6 +39,10 @@ function App() {
           <Route path="product" element={<ProductDetailPage />} />
           <Route path="solaires" element={<LunettesSolaires />} />
           <Route path="optiques" element={<LunettesOptiques />} />
+            <Route path="panier" element={<Panier />} />
+          <Route path="/mes-commandes" element={<MesCommandes />} />
+          
+          <Route path="/finaliser-achat" element={<FinaliserAchat />} />
         </Route>
         {/* ========================================
             AUTHENTIFICATION
@@ -53,6 +57,7 @@ function App() {
           <Route path="produits" element={<Products />} />
           <Route path="produits/ajouter" element={<AddProduct />} />
           <Route path="produits/modifier/:id" element={<EditProduct />} />
+          <Route path="commandes" element={ <AdminCommandes />} />
         </Route>
       </Routes>
     </BrowserRouter>
