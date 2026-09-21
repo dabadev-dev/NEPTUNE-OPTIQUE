@@ -52,12 +52,17 @@ export default function Navbar() {
             </span>
           </Link>
         </div>
+        <button>
+          <Link to="/register" className="bg-[#29438f] text-white hover:bg-[#1a2c60] font-serif py-2 px-4 rounded">
+            S'inscrire
+          </Link>
+        </button>
         <div className="md:hidden">
           <Menu size={24} strokeWidth={1.8} />
         </div>
       </div>
       <div className="w-full py-2 overflow-hidden bg-blue-900 text-white">
-        <div className="flex w-max animate-[marquee_30s_linear_infinite] whitespace-nowrap">
+        <div className="flex w-max animate-[marquee_50s_linear_infinite] whitespace-nowrap">
           <span className="mx-10">{message}</span>
           <span className="mx-10">{message}</span>
         </div>
