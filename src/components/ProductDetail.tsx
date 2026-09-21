@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ArrowLeftRight,
   Heart,
@@ -14,6 +15,14 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import type { Product } from "../data/products";
 
+import {
+  addFavorite,
+  getFavorites,
+  removeFavorite,
+} from "../services/favoriteService";
+
+import { addToCart } from "../services/cartService";
+
 interface ProductDetailProps {
   product: Product;
   onAddToCart?: (product: Product, quantity: number) => void;
@@ -23,9 +32,61 @@ export default function ProductDetail({
   product,
   onAddToCart,
 }: ProductDetailProps) {
+  const navigate = useNavigate();
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  // Vérifier si le produit est déjà dans les favoris
+  useEffect(() => {
+    const loadFavorite = async () => {
+      const token = localStorage.getItem("access_token");
+
+      if (!token) return;
+
+      try {
+        const favorites = await getFavorites();
+
+        const exists = favorites.some(
+          (favorite: any) =>
+            favorite.productId === product.id,
+        );
+
+        setIsFavorite(exists);
+      } catch (error) {
+        console.error("Erreur favoris :", error);
+      }
+    };
+
+    loadFavorite();
+  }, [product.id]);
+
+  // Ajouter / supprimer des favoris
+  const handleFavorite = async () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      alert("Connectez-vous pour ajouter un favori");
+      return;
+    }
+
+    try {
+      if (isFavorite) {
+        await removeFavorite(product.id);
+        setIsFavorite(false);
+      } else {
+        await addFavorite(product.id);
+        setIsFavorite(true);
+      }
+    } catch (error: any) {
+      if (error.response?.status === 409) {
+        setIsFavorite(true);
+      } else {
+        console.error("Erreur favori :", error);
+      }
+    }
+  };
 
   // Image provenant du backend NestJS
   const images = [
@@ -49,12 +110,40 @@ export default function ProductDetail({
   };
 
   const increaseQuantity = () => {
-    setQuantity((prev) => Math.min(stock, prev + 1));
+    setQuantity((prev) =>
+      Math.min(stock, prev + 1),
+    );
   };
 
-  const handleAddToCart = () => {
-    if (onAddToCart) {
-      onAddToCart(product, quantity);
+  // Ajouter le produit au panier
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      alert(
+        "Connectez-vous pour ajouter un produit au panier",
+      );
+      return;
+    }
+
+    try {
+      await addToCart(product.id, quantity);
+
+      if (onAddToCart) {
+        onAddToCart(product, quantity);
+      }
+
+      // Redirection automatique vers le panier
+      navigate("/panier");
+    } catch (error) {
+      console.error(
+        "Erreur ajout au panier :",
+        error,
+      );
+
+      alert(
+        "Impossible d'ajouter le produit au panier",
+      );
     }
   };
 
@@ -80,7 +169,9 @@ export default function ProductDetail({
                 <button
                   type="button"
                   onClick={() =>
-                    setSelectedImage((prev) => prev - 1)
+                    setSelectedImage(
+                      (prev) => prev - 1,
+                    )
                   }
                   className="
                     absolute left-4 top-1/2
@@ -96,11 +187,14 @@ export default function ProductDetail({
               )}
 
               {/* Bouton suivant */}
-              {selectedImage < images.length - 1 && (
+              {selectedImage <
+                images.length - 1 && (
                 <button
                   type="button"
                   onClick={() =>
-                    setSelectedImage((prev) => prev + 1)
+                    setSelectedImage(
+                      (prev) => prev + 1,
+                    )
                   }
                   className="
                     absolute right-4 top-1/2
@@ -122,7 +216,9 @@ export default function ProductDetail({
                 <button
                   key={image}
                   type="button"
-                  onClick={() => setSelectedImage(index)}
+                  onClick={() =>
+                    setSelectedImage(index)
+                  }
                   className={`
                     h-20 w-20 shrink-0 overflow-hidden border
                     transition
@@ -193,9 +289,7 @@ export default function ProductDetail({
               {/* Favoris */}
               <button
                 type="button"
-                onClick={() =>
-                  setIsFavorite(!isFavorite)
-                }
+                onClick={handleFavorite}
                 className={`
                   flex h-10 w-10 items-center justify-center
                   border border-gray-300
@@ -206,7 +300,11 @@ export default function ProductDetail({
                       : "text-gray-700 hover:border-[#263f87] hover:text-[#263f87]"
                   }
                 `}
-                title="Ajouter aux favoris"
+                title={
+                  isFavorite
+                    ? "Retirer des favoris"
+                    : "Ajouter aux favoris"
+                }
               >
                 <Heart
                   size={19}
@@ -322,9 +420,7 @@ export default function ProductDetail({
             {/* Favoris texte */}
             <button
               type="button"
-              onClick={() =>
-                setIsFavorite(!isFavorite)
-              }
+              onClick={handleFavorite}
               className="
                 mt-4 flex w-fit items-center gap-2
                 text-sm text-gray-700
@@ -340,7 +436,10 @@ export default function ProductDetail({
                     : "none"
                 }
               />
-              Ajouter à la liste d’envies
+
+              {isFavorite
+                ? "Retirer de la liste d’envies"
+                : "Ajouter à la liste d’envies"}
             </button>
 
             {/* Demander devis */}

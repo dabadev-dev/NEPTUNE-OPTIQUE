@@ -50,13 +50,13 @@ export async function login(
     data,
   );
 
-  // Sauvegarder le token
+  console.log("RÉPONSE LOGIN :", response.data);
+
   localStorage.setItem(
     "access_token",
     response.data.access_token,
   );
 
-  // Sauvegarder les informations de l'utilisateur
   localStorage.setItem(
     "user",
     JSON.stringify(response.data.user),

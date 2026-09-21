@@ -18,6 +18,10 @@ import EditProduct from "./pages/dashboard/EditProduct";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Panier from "./pages/Panier";
+import MesCommandes from "./pages/MesCommandes";
+import AdminCommandes from "./pages/AdminCommandes";
+import AdminRoute from "./components/AdminRoute";
+import FinaliserAchat from "./pages/FinaliserAchat";
 
 function App() {
   return (

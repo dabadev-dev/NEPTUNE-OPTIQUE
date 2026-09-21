@@ -6,239 +6,269 @@ import {
   Trash2,
   ArrowLeft,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   getCart,
   removeFromCart,
   updateCartQuantity,
-  getCartTotal,
-  type CartItem,
-} from "../utils/Panier";
+} from "../services/cartService";
+
+import type { Product } from "../data/products";
+
+interface CartItem {
+  id: number;
+  userId: number;
+  productId: number;
+  quantity: number;
+  product: Product;
+}
 
 export default function Panier() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const navigate = useNavigate();
 
-  const loadCart = () => {
-    setCart(getCart());
+  const loadCart = async () => {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      setCart([]);
+      return;
+    }
+
+    try {
+      const data = await getCart();
+      setCart(data);
+    } catch (error) {
+      console.error("Erreur chargement panier :", error);
+    }
   };
 
   useEffect(() => {
     loadCart();
-
-    window.addEventListener("cartUpdated", loadCart);
-
-    return () => {
-      window.removeEventListener("cartUpdated", loadCart);
-    };
   }, []);
 
-  const total = getCartTotal();
+  const handleRemove = async (productId: number) => {
+    try {
+      await removeFromCart(productId);
+
+      setCart((prev) =>
+        prev.filter(
+          (item) => item.productId !== productId,
+        ),
+      );
+    } catch (error) {
+      console.error(
+        "Erreur suppression panier :",
+        error,
+      );
+    }
+  };
+
+  const handleQuantity = async (
+    productId: number,
+    quantity: number,
+  ) => {
+    try {
+      if (quantity <= 0) {
+        await removeFromCart(productId);
+
+        setCart((prev) =>
+          prev.filter(
+            (item) => item.productId !== productId,
+          ),
+        );
+
+        return;
+      }
+
+      const updatedItem = await updateCartQuantity(
+        productId,
+        quantity,
+      );
+
+      setCart((prev) =>
+        prev.map((item) =>
+          item.productId === productId
+            ? {
+                ...item,
+                quantity: updatedItem.quantity,
+              }
+            : item,
+        ),
+      );
+    } catch (error) {
+      console.error(
+        "Erreur modification quantité :",
+        error,
+      );
+    }
+  };
+
+  // Aller vers la page de finalisation
+  const handleCheckout = () => {
+    navigate("/finaliser-achat");
+  };
+
+  const total = cart.reduce(
+    (sum, item) =>
+      sum +
+      Number(item.product.price) * item.quantity,
+    0,
+  );
 
   return (
     <div className="min-h-screen bg-[#f8f8f6]">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-
-        {/* HEADER */}
+        {/* En-tête */}
         <div className="mb-10">
           <Link
-            to="/catalogue"
-            className="mb-5 inline-flex items-center gap-2 text-sm text-gray-600 hover:text-[#29438f]"
+            to="/"
+            className="mb-6 inline-flex items-center gap-2 text-sm text-gray-600 hover:text-black"
           >
-            <ArrowLeft size={17} />
+            <ArrowLeft size={18} />
             Continuer mes achats
           </Link>
 
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#29438f] text-white">
-              <ShoppingBag size={22} />
-            </div>
-
-            <div>
-              <h1 className="text-3xl font-semibold text-gray-900">
-                Mon panier
-              </h1>
-
-              <p className="mt-1 text-sm text-gray-500">
-                {cart.length === 0
-                  ? "Votre panier est vide"
-                  : `${cart.length} produit${cart.length > 1 ? "s" : ""}`}
-              </p>
-            </div>
-          </div>
+          <h1 className="text-3xl font-light tracking-wide">
+            Mon panier
+          </h1>
         </div>
 
-        {/* PANIER VIDE */}
+        {/* Panier vide */}
         {cart.length === 0 ? (
-          <div className="rounded-2xl bg-white px-6 py-20 text-center shadow-sm">
+          <div className="flex flex-col items-center justify-center py-24 text-center">
             <ShoppingBag
-              size={55}
-              className="mx-auto mb-5 text-gray-300"
+              size={50}
+              strokeWidth={1}
+              className="mb-5 text-gray-400"
             />
 
-            <h2 className="text-xl font-semibold text-gray-800">
+            <h2 className="mb-2 text-xl font-medium">
               Votre panier est vide
             </h2>
 
-            <p className="mx-auto mt-2 max-w-md text-sm text-gray-500">
-              Découvrez notre collection de lunettes et ajoutez
-              vos produits préférés à votre panier.
+            <p className="mb-6 text-gray-500">
+              Découvrez nos produits et ajoutez vos
+              favoris au panier.
             </p>
 
             <Link
-              to="/catalogue"
-              className="mt-7 inline-flex rounded-lg bg-[#29438f] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#20356f]"
+              to="/"
+              className="bg-black px-6 py-3 text-sm text-white transition hover:bg-gray-800"
             >
-              Découvrir les produits
+              Découvrir nos produits
             </Link>
           </div>
         ) : (
-          <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-
-            {/* PRODUITS */}
-            <section className="space-y-4">
+          <div className="grid gap-10 lg:grid-cols-3">
+            {/* Produits */}
+            <div className="space-y-6 lg:col-span-2">
               {cart.map((item) => (
-                <article
-                  key={item.product.id}
-                  className="rounded-2xl bg-white p-5 shadow-sm"
+                <div
+                  key={item.id}
+                  className="flex gap-5 border-b border-gray-200 pb-6"
                 >
-                  <div className="flex flex-col gap-5 sm:flex-row">
+                  <img
+                    src={`http://localhost:3000/${item.product.image}`}
+                    alt={item.product.name}
+                    className="h-32 w-32 object-cover"
+                  />
 
-                    {/* IMAGE */}
-                    <Link
-                      to={`/product/${item.product.id}`}
-                      className="h-32 w-full shrink-0 overflow-hidden rounded-xl bg-[#f5f5f3] sm:w-32"
-                    >
-                      <img
-                        src={item.product.image}
-                        alt={item.product.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </Link>
+                  <div className="flex flex-1 flex-col justify-between">
+                    <div>
+                      <h2 className="text-lg font-medium">
+                        {item.product.name}
+                      </h2>
 
-                    {/* INFORMATIONS */}
-                    <div className="flex flex-1 flex-col justify-between">
+                      <p className="mt-1 text-sm text-gray-500">
+                        {item.product.category}
+                      </p>
 
-                      <div>
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <Link
-                              to={`/product/${item.product.id}`}
-                              className="text-lg font-medium text-gray-900 hover:text-[#29438f]"
-                            >
-                              {item.product.name}
-                            </Link>
+                      <p className="mt-2 font-medium">
+                        {Number(
+                          item.product.price,
+                        ).toLocaleString("fr-FR")}{" "}
+                        CFA
+                      </p>
+                    </div>
 
-                            <p className="mt-1 text-sm text-gray-500">
-                              {item.product.type}
-                            </p>
-                          </div>
+                    {/* Quantité + suppression */}
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center border border-gray-300">
+                        <button
+                          onClick={() =>
+                            handleQuantity(
+                              item.productId,
+                              item.quantity - 1,
+                            )
+                          }
+                          className="p-2 hover:bg-gray-100"
+                        >
+                          <Minus size={16} />
+                        </button>
 
-                          <button
-                            type="button"
-                            onClick={() =>
-                              removeFromCart(item.product.id)
-                            }
-                            className="text-gray-400 transition hover:text-red-500"
-                            aria-label="Supprimer"
-                          >
-                            <Trash2 size={19} />
-                          </button>
-                        </div>
+                        <span className="px-4">
+                          {item.quantity}
+                        </span>
 
-                        <p className="mt-3 font-medium text-[#29438f]">
-                          {item.product.price.toLocaleString("fr-FR")} CFA
-                        </p>
+                        <button
+                          onClick={() =>
+                            handleQuantity(
+                              item.productId,
+                              item.quantity + 1,
+                            )
+                          }
+                          className="p-2 hover:bg-gray-100"
+                        >
+                          <Plus size={16} />
+                        </button>
                       </div>
 
-                      {/* QUANTITE */}
-                      <div className="mt-5 flex items-center justify-between">
-
-                        <div className="flex items-center rounded-lg border border-gray-200">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              updateCartQuantity(
-                                item.product.id,
-                                item.quantity - 1,
-                              )
-                            }
-                            className="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-50"
-                          >
-                            <Minus size={15} />
-                          </button>
-
-                          <span className="flex h-9 w-10 items-center justify-center border-x border-gray-200 text-sm font-medium">
-                            {item.quantity}
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={() =>
-                              updateCartQuantity(
-                                item.product.id,
-                                item.quantity + 1,
-                              )
-                            }
-                            className="flex h-9 w-9 items-center justify-center text-gray-600 hover:bg-gray-50"
-                          >
-                            <Plus size={15} />
-                          </button>
-                        </div>
-
-                        <p className="font-semibold text-gray-900">
-                          {(
-                            item.product.price * item.quantity
-                          ).toLocaleString("fr-FR")}{" "}
-                          CFA
-                        </p>
-                      </div>
+                      <button
+                        onClick={() =>
+                          handleRemove(item.productId)
+                        }
+                        className="text-gray-500 hover:text-red-600"
+                      >
+                        <Trash2 size={20} />
+                      </button>
                     </div>
                   </div>
-                </article>
+                </div>
               ))}
-            </section>
+            </div>
 
-            {/* RESUME */}
-            <aside className="h-fit rounded-2xl bg-white p-6 shadow-sm lg:sticky lg:top-6">
-
-              <h2 className="text-xl font-semibold text-gray-900">
+            {/* Résumé */}
+            <div className="h-fit border border-gray-200 bg-white p-6">
+              <h2 className="mb-6 text-xl font-medium">
                 Résumé de la commande
               </h2>
 
-              <div className="mt-6 space-y-4 border-b border-gray-100 pb-6">
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Sous-total</span>
-                  <span>
-                    {total.toLocaleString("fr-FR")} CFA
-                  </span>
-                </div>
+              <div className="mb-4 flex justify-between text-sm">
+                <span>Sous-total</span>
 
-                <div className="flex justify-between text-sm text-gray-600">
-                  <span>Livraison</span>
-                  <span>À définir</span>
-                </div>
-              </div>
-
-              <div className="mt-5 flex justify-between">
-                <span className="font-semibold">Total</span>
-
-                <span className="text-xl font-bold text-[#29438f]">
+                <span>
                   {total.toLocaleString("fr-FR")} CFA
                 </span>
               </div>
 
+              <div className="mb-6 flex justify-between border-t border-gray-200 pt-4 font-medium">
+                <span>Total</span>
+
+                <span>
+                  {total.toLocaleString("fr-FR")} CFA
+                </span>
+              </div>
+
+              {/* Finaliser l'achat */}
               <button
-                type="button"
-                className="mt-7 w-full rounded-lg bg-[#29438f] py-3.5 text-sm font-medium text-white transition hover:bg-[#20356f]"
+                onClick={handleCheckout}
+                className="w-full bg-black px-6 py-4 text-sm font-medium text-white transition hover:bg-gray-800"
               >
                 Passer la commande
               </button>
-
-              <p className="mt-4 text-center text-xs text-gray-400">
-                Le paiement sera disponible prochainement.
-              </p>
-            </aside>
+            </div>
           </div>
         )}
       </div>
